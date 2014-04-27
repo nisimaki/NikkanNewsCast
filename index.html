@@ -1,0 +1,477 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+
+<meta name="keywords" content="日刊工業新聞社,電子版,モノづくり,ニュース,新聞,日刊工業,ビジネスライン,Business Line,日刊,速報,購読,産業" />
+<meta name="description" content="日刊工業新聞社のニュースサイト。モノづくり関連ニュースを発信する「モノづくり情報局」、企業のニュースリリースを配信する「企業発表」、業界動向が解る「業界展望台」、中小企業情報「ビジネスプラザ」等、ビジネスに直結する記事・情報を提供。" />
+<link rel="shortcut icon" type="img/x-icon" href="http://www.nikkan.co.jp/common/images/favi3.ico" />
+<meta property="og:title" content="日刊工業新聞 News cast" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://preweb.alicemagic.biz/nikkan/movie_news/" />
+<meta property="og:image" content="http://preweb.alicemagic.biz/nikkan/movie_news/img/logo.gif" />
+<meta property="og:site_name" content="日刊工業新聞 News cast" />
+<meta property="og:description" content=" 日刊工業新聞社のニュースサイト。モノづくり関連ニュースを発信する「モノづくり情報局」、企業のニュースリリースを配信する「企業発表」、業界動向が解る「業界展望台」、中小企業情報「ビジネスプラザ」等、ビジネスに直結する記事・情報を提供。" />
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-3012604-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+<title>日刊工業新聞 News cast</title>
+
+<link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+<link rel="stylesheet" type="text/css" href="css/jquery.bxslider.css" media="all" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.bxslider.js"></script>
+<script type="text/javascript" src="js/jquery.li-scroller.1.0.js"></script>
+<script type="text/javascript" src="js/jtruncsubstr-1.0rc.js"></script>
+<script type="text/javascript" src="https://ssl-cache.stream.ne.jp/www50/eqa514ffey/jmc_pub/jmc_api/eqApi.js"></script>
+<script type="text/javascript" charset="UTF-8" src="https://ssl-cache.stream.ne.jp/www50/eqa514ffey/jmc_pub/jmc_swf/player/static/onetag_jmc_obj.js"></script>
+<script type="text/javascript">
+
+var readMore; //続きを読む用変数
+var preload; //画像先読み用変数
+var heightMatch; //高さ合わせ用変数
+var slider; //スライダー実行用変数
+var toScrlMainMovie; //スクロール実行用変数
+
+$(function(){	
+	//動画へスクロール移動
+	toScrlMainMovie = function(){
+	$('#newsAll a[onclick], #newsPopular a[onclick]').click(function(){
+		var p = $("#mainMovieTab").offset().top;
+		$('html,body').animate({ scrollTop: p }, 'fast');
+		return false;
+	});
+	}
+	
+	//スライダー
+	slider = function(){
+	$('#bxsliderRelated').bxSlider({
+	pager: false,
+	touchEnabled: false
+	});
+	}
+	
+	$('.bxslider').bxSlider({
+	pager: false,
+	touchEnabled: false
+	});
+	
+	//続きを読む
+	readMore = function(){
+		$('#readMore').jTruncSubstr({
+				length: 120,            // 表示する文字数
+				minTrail: 0,            // 省略文字の最低文字数
+				moreText: ">続きを読む",       // 省略部分を表示するリンクの文字
+				lessText: ">折りたたむ",       // 省略部分を非表示にするリンクの文字
+				ellipsisText: "...",    // 省略部分をあらわす文字
+				moreAni: 0,        // 折り広げるスピード
+				lessAni: 0         // 折り畳むスピード
+		});
+		//「続きを読む」をクリックしたときに高さ合わせ実行
+		$('p#readMore span a').click(function(){
+			var mainMovieWrapId = $(this).parent().parent().parent().parent().parent();
+			heightMatch(mainMovieWrapId);
+		});
+		//console.log('readMore End');
+	};
+	
+	//タブon画像の先読み
+	preload = function(){
+		for(var i = 0; i<arguments.length; i++){
+			$("<img>").attr("src", arguments[i]);
+		}
+	};
+	preload(
+		"img/tab_headline_o.gif",
+		"img/tab_robot_o.gif",
+		"img/tab_it_o.gif",
+		"img/tab_chemistry_o.gif",
+		"img/tab_medical_o.gif",
+		"img/tab_civil_o.gif",
+		"img/tab_energy_o.gif",
+		"img/tab_transport_o.gif",
+		"img/tab_politicaleconomy_o.gif",
+		"img/tab_etc_o.gif"
+	);
+	
+	//動画エリアのメインエリアの高さにサブリストエリアの高さを合わせる関数定義
+	heightMatch = function (e){ //eはjQueryオブジェクト
+		if(e){
+			var mainMovieHeight = e.find('#mainMovie').height();
+			e.find('#mainMovieList').height(mainMovieHeight - 2);
+		} else {
+			var mainMovieHeight = $('#mainMovie').height();
+			$('#mainMovieList').height(mainMovieHeight - 2);
+		}
+	}
+	
+	//ニューススクロール
+	$("ul#demo").liScroll({travelocity: 0.07});
+	$('#demo, .bxslider').css('visibility','visible'); //読み込み終了前にHTMLが表示されてしまうのを抑える
+	
+	//タブをクリックしたときのコンテンツ切り替え
+	$('#mainMovieTab li').click(function(){
+			if($(this).hasClass('current') === false){
+				var id = $(this).attr('id').replace('Tab','');
+				$(this).addClass('current').siblings().removeClass('current');
+				heightMatch($('#' + id));
+				
+				$('#mainMovieList').empty();
+				callApi("getMediaByTag", tabContentNum[id]);
+				//console.log('tabClick End');
+			}
+	});
+	
+	//タブにカーソル乗せたときの画像切り替え
+	$('#mainMovieTab li').hover(
+		function(){
+			if ($(this).hasClass('current') === false){
+				$(this).addClass('on');
+			}
+		},
+		function(){
+			$(this).removeClass('on');
+		}
+	);
+	
+	//タブカテゴリの分類ナンバーデータ
+	var tabContentNum = {
+	headline : 'a001000|a002000|a003000|a004000|a005000|a006000|a007000|a008000|a009000|a010000',
+	robot : 'a001000',
+	it : 'a002000',
+	chemistry : 'a003000',
+	medical : 'a004000',
+	civil : 'a005000',
+	energy : 'a006000',
+	industry : 'a007000',
+	politicaleconomy : 'a008000',
+	academy : 'a009000'
+	}
+	//デフォルトのAPIコール
+	callApi("getAllMedia"); //動画ニュース一覧
+	callApi("getMediaByTag", tabContentNum['headline']); //ヘッドラインタブ
+	
+	//console.log('jQuery End');
+});
+</script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+</head>
+
+<body>
+
+<div id="header" class="clearfix">
+
+<!-- SMARTtag start-->
+<script language='JavaScript'>
+  var CM8Server='web-jp.ad-v.jp';
+  var CM8Cat='nikkan.contents.movie';
+</script>
+<script language='JavaScript' src='http://web-jp.ad-v.jp/adam/cm8adam_1_call.js'></script>
+<!-- SMARTtag end-->
+
+<h1 id="logo"><a href="/"><img src="img/logo.gif" width="290" height="60" alt="日刊工業新聞 News cast" /></a></h1>
+<div id="rightBox" class="clearfix">
+<ul id="utilitylink" class="clearfix">
+<li id="monodo"><a href="monodopr.html" target="_blank"><img src="img/monodo.png" width="270" height="25" alt="monoDo PR動画掲載サービス[アットモノドー]について" /></a></li>
+<li id="eNikkan"><a href="http://www.nikkan.co.jp/" target="_blank"><img src="img/eNikkan.gif" width="235" height="25" alt="日刊工業新聞 Business Line" /></a></li>
+</ul>
+</div><!-- /rightBox -->
+</div><!-- /header -->
+
+
+<div id="contentPrimaryArea">
+
+	<!-- news_t -->
+	<div class="nw21">
+	  <a href="http://www.nw21.nikkan.co.jp/" target="_blank"><img src="/common/images/nwlogo.gif" class="nw21logo"></a>
+	  <ul id="demo">
+		<li><A href="/news/nkx0120140428baag.html?news-t0428">?????????Σ??Σ???????Φ?β??????????</a></li>
+		<li><A href="/news/nkx0120140428bcag.html?news-t0428">?????a??κ??????????????????????????????????</a></li>
+		<li><A href="/news/nkx0120140428bcah.html?news-t0428">?????????????????ι??????????</a></li>
+		<li><A href="/news/nkx0120140428bcan.html?news-t0428">??????????????????????????????????????????????????????????</a></li>
+		<li><A href="/news/nkx0220140428bjak.html?news-t0428">??????κ???????????????????????????????θ???????</a></li>
+		<li><A href="/news/nkx0220140428bjal.html?news-t0428">???????????????????????????????</a></li>
+		<li><A href="/news/nkx0320140428bjan.html?news-t0428">??????????????????????????aaο????????????????</a></li>
+		<li><A href="/news/nkx0420140428beag.html?news-t0428">?????????????????ι?????????????????????ε??????</a></li>
+		<li><A href="/news/nkx0420140428beam.html?news-t0428">?????κ????????????3?????????????????????</a></li>
+		<li><A href="/news/nkx0420140428beal.html?news-t0428">?????????????????????????????????Σ???????????????????????????</a></li>
+		<li><A href="/news/nkx0520140428aaai.html?news-t0428">??????????°?????????????????????????</a></li>
+		<li><A href="/news/nkx0620140428hlah.html?news-t0428">????￡??????????????????ο???????????????????????????</a></li>
+		<li><A href="/news/nkx0720140428eaag.html?news-t0428">???????????????????????????</a></li>
+		<li><A href="/news/nkx0720140428eaad.html?news-t0428">????????????????????????????????????????????</a></li>
+		<li><A href="/news/nkx0720140428eaae.html?news-t0428">??????????α???????????????????Τ????????????</a></li>
+		<li><A href="/news/nkx0720140428eaal.html?news-t0428">?????????????θ?????????????????礬??????????????????????????</a></li>
+		<li><A href="/news/nkx0820140428abac.html?news-t0428">??????????????????л????????????????????????????</a></li>
+		<li><A href="/news/nkx0820140428caaw.html?news-t0428">???????????????????????3?????????????????</a></li>
+		<li><A href="/news/nkx0820140428cbag.html?news-t0428">??????????o????ο????????????</a></li>
+		<li><A href="/news/nkx0820140428eaaj.html?news-t0428">?????????????????????ν???????????????к????????????????</a></li>
+		<li><A href="/news/nkx1020140428cbac.html?news-t0428">?????Υ?????????????????o?????????????</a></li>
+		<li><A href="/news/nkx1020140428cbao.html?news-t0428">???????????????Ф????≫?????????</a></li>
+		<li><A href="/news/nkx1020140428eaak.html?news-t0428">??Σ?≫???????????????Τ???????????????????u???o???????</a></li>
+		<li><A href="/news/nkx1020140428eaan.html?news-t0428">?????к???????????????????????к??ε???????</a></li>
+		<li><A href="/news/nkx1120140428caba.html?news-t0428">???????????????????????????</a></li>
+		<li><A href="/news/nkx1120140428hlak.html?news-t0428">???????Ω????????????</a></li>
+		<li><A href="/news/nkx1420140428hlap.html?news-t0428">????????????????????????????\?????????????????????</a></li>
+   </ul>
+</div>
+
+	<!-- / news_t -->
+
+<div id="contentH2Wrap"><div id="contentH2"><img src="img/ttl_newsMovie.gif" width="120" height="25" alt="動画ニュース" /></div></div>
+
+<div id="contentWrap">
+<div id="content">
+
+<div id="monodoAd"><img src="img/monoDo_ad.png" width="150" height="21" alt="@monoDo" /></div>
+<ul class="bxslider" style="height:337px; overflow:hidden;">
+
+<li class="clearfix">
+<div class="sliderLBox"><a href="http://www.nikkan.co.jp/newscast/20140422-01.html#movie176">
+<div><img src="img/160x90_04.jpg" width="160" height="90" alt="" /></div>
+<p>極微小電流信号を増幅するプログラマブル電流増幅器　【エヌエフ回路設計ブロック】</p>
+</a></div>
+
+<div class="sliderLBox"><a href="http://www.nikkan.co.jp/newscast/20131227-01.html#movie138">
+<div><img src="img/160x90_03.jpg" width="160" height="90" alt="" /></div>
+<p>二面拘束で高精度ドッキングを可能にしたロボットハンドチェンジャー　【コスメック】</p>
+</a></div>
+
+<div class="sliderLBox"><a href="http://www.nikkan.co.jp/newscast/20131213-01.html#movie136">
+<div><img src="img/160x90_02.jpg" width="160" height="90" alt="" /></div>
+<p>筋肉の動きを可視化したリハビリ支援ロボット R-cloud<br>【埼玉大学・辻俊明 准教授】</p>
+</a></div>
+
+<div class="sliderLBox"><a href="http://www.nikkan.co.jp/newscast/20131127-01.html#movie132">
+<div><img src="img/160x90_01.jpg" width="160" height="90" alt="" /></div>
+<p>世界最小クラス・超小型ロータリーエンコーダ<br>【マイクロテック・ラボラトリー】</p>
+</a></div>
+
+<div class="sliderLBox"><a href="">
+<div><img src="img/160x90_05.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div>
+
+
+<div class="sliderLBox"><a href="">
+<div><img src="img/160x90_07.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div><div class="sliderLBox"><a href="">
+<div><img src="img/160x90_06.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div><div class="sliderLBox"><a href="">
+<div><img src="img/160x90_05.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div><div class="sliderLBox"><a href="">
+<div><img src="img/160x90_06.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div><div class="sliderLBox last"><a href="">
+<div><img src="img/160x90_07.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div>
+
+</li>
+
+
+<li class="clearfix">
+<div class="sliderLBox"><a href="http://www.nikkan.co.jp/newscast/20140422-01.html#movie176">
+<div><img src="img/160x90_04.jpg" width="160" height="90" alt="" /></div>
+<p>極微小電流信号を増幅するプログラマブル電流増幅器　【エヌエフ回路設計ブロック】</p>
+</a></div>
+
+<div class="sliderLBox"><a href="http://www.nikkan.co.jp/newscast/20131227-01.html#movie138">
+<div><img src="img/160x90_03.jpg" width="160" height="90" alt="" /></div>
+<p>二面拘束で高精度ドッキングを可能にしたロボットハンドチェンジャー　【コスメック】</p>
+</a></div>
+
+<div class="sliderLBox"><a href="http://www.nikkan.co.jp/newscast/20131213-01.html#movie136">
+<div><img src="img/160x90_02.jpg" width="160" height="90" alt="" /></div>
+<p>筋肉の動きを可視化したリハビリ支援ロボット R-cloud<br>【埼玉大学・辻俊明 准教授】</p>
+</a></div>
+
+<div class="sliderLBox"><a href="http://www.nikkan.co.jp/newscast/20131127-01.html#movie132">
+<div><img src="img/160x90_01.jpg" width="160" height="90" alt="" /></div>
+<p>世界最小クラス・超小型ロータリーエンコーダ<br>【マイクロテック・ラボラトリー】</p>
+</a></div>
+<div class="sliderLBox"><a href="">
+<div><img src="img/160x90_05.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div>
+
+<div class="sliderLBox"><a href="">
+<div><img src="img/160x90_07.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div><div class="sliderLBox"><a href="">
+<div><img src="img/160x90_06.jpg" width="160" height="90" alt="" /></div>
+<p</p>
+</a></div><div class="sliderLBox"><a href="">
+<div><img src="img/160x90_05.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div><div class="sliderLBox"><a href="">
+<div><img src="img/160x90_06.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div><div class="sliderLBox last"><a href="">
+<div><img src="img/160x90_07.jpg" width="160" height="90" alt="" /></div>
+<p></p>
+</a></div>
+</li>
+</ul><!-- /bxslider -->
+
+
+
+
+
+<ul id="mainMovieTab" style="margin-top:30px;">
+<li id="headlineTab" class="current">ヘッドライン</li><li id="robotTab">ロボット・機械</li><li id="itTab">IT・エレクトロニクス</li><li id="chemistryTab">化学・素材</li><li id="medicalTab">医薬・医療・食品</li><li id="civilTab">土木・建設・流通</li><li id="energyTab">エネルギー・環境</li><li id="industryTab">自動車・航空・宇宙</li><li id="politicaleconomyTab">政治・経済</li><li id="academyTab">大学・研究</li>
+</ul>
+
+<div style="position:relative;">
+
+<div id="eqPlayer"></div>
+
+<div id="mainMovieWrap" class="clearfix">
+<div id="mainMovie">
+<div id="mainMovieDetail">
+<h4></h4>
+<p id="readMore"></p>
+
+<div id="socialBtn" class="clearfix">
+
+<iframe id="fb" src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fpreweb.alicemagic.biz%2Fnikkan%2Fmovie_news%2F&amp;send=false&amp;layout=button_count&amp;width=150&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:150px; height:21px;" allowTransparency="true"></iframe>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div><!-- /socialBtn -->
+
+</div><!-- /mainMovieDetail -->
+</div><!-- /mainMovie -->
+
+<div id="mainMovieList">
+</div><!-- /mainMovieList -->
+</div><!-- /mainMovieWrap -->
+
+
+<div id="relatedMovie">
+<div><img src="img/ttl_related.gif" width="110" height="20" alt="関連動画" /></div>
+</div><!-- /relatedMovie -->
+</div><!-- /posision:relative; -->
+
+
+
+<div class="clearfix">
+<div><img src="img/ttl_newsAll.gif" width="140" height="24" alt="動画ニュース一覧" /></div>
+<div id="newsAll">
+</div><!-- /newsAll -->
+
+
+
+
+<div id="newsAllSub">
+<div>
+<!-- PLACEHOLDERtag start-->
+<script language='JavaScript'>CM8ShowAd('Largerec_300x250')</script>
+<noscript>
+<a href='http://web-jp.ad-v.jp/adam/ep/click/nikkan.contents.movie/Largerec_300x250?cat=nikkan.contents.movie' target='_blank'>
+<img src='http://web-jp.ad-v.jp/adam/noscript?cat=nikkan.contents.movie&format=Largerec_300x250' border='0'></a>
+</noscript>
+<!-- PLACEHOLDERtag end-->
+</div>
+
+
+<div id="newsPickup">
+<h3><img src="img/ttl_newsPickup.gif" width="250" height="24" alt="オススメ動画" /></h3>
+<ul>
+<li><a href="http://www.nikkan.co.jp/newscast/20140422-01.html#movie176">
+<div><img src="img/160x90_04.jpg" width="100" height="57" alt="" /></div>
+<p>極微小電流信号を増幅するプログラマブル電流増幅器<br>【エヌエフ回路設計ブロック】</p>
+</a></li>
+
+<li><a href="http://www.nikkan.co.jp/newscast/20131227-01.html#movie138">
+<div><img src="img/160x90_03.jpg" width="100" height="57" alt="" /></div>
+<p>二面拘束で高精度ドッキングを可能にしたロボットハンドチェンジャー<br>【株式会社コスメック】</p>
+</a></li>
+
+<li><a href="http://www.nikkan.co.jp/newscast/20131213-01.html#movie136">
+<div><img src="img/160x90_02.jpg" width="100" height="57" alt="" /></div>
+<p>筋肉の動きを可視化したリハビリ支援ロボット R-cloud<br>【埼玉大学・辻俊明 准教授】</p>
+</a></li>
+
+<li><a href="http://www.nikkan.co.jp/newscast/20131127-01.html#movie132">
+<div><img src="img/160x90_01.jpg" width="100" height="57" alt="" /></div>
+<p>世界最小クラス・超小型ロータリーエンコーダ<br>【マイクロテック・ラボラトリー】</p>
+</a></li>
+</ul>
+</div><!-- /newsPickup -->
+
+
+<div id="newsPopular">
+<h3><img src="img/ttl_newsPopular.gif" width="250" height="24" alt="人気動画" /></h3>
+<ul>
+<li><a href="javascript:void(0)" onclick="callApi('getMediaById', 80);">
+<div><img src="http://eqa514ffey.eq.webcdn.stream.ne.jp/www50/eqa514ffey/jmc_pub/thumbnail/00001/4e117be3fe0540a8b03e69acb340d055_14.jpg" width="100" height="57" alt="" /></div>
+<p>トヨタ、移動支援ロボットを公道で実証実験</p>
+</a></li><li><a href="javascript:void(0)" onclick="callApi('getMediaById', 79);">
+<div><img src="http://eqa514ffey.eq.webcdn.stream.ne.jp/www50/eqa514ffey/jmc_pub/thumbnail/00001/f2f87dd02a244c4784d9b459a7690354_14.jpg" width="100" height="57" alt="" /></div>
+<p>きらめく楽器の二重奏－山下工業所、アルミ製バイオリンとチェロを披露</p>
+</a></li><li><a href="javascript:void(0)" onclick="callApi('getMediaById', 77);">
+<div><img src="http://eqa514ffey.eq.webcdn.stream.ne.jp/www50/eqa514ffey/jmc_pub/thumbnail/00001/364b0e07913e43fe893b5b6df9d4366a_14.jpg" width="100" height="57" alt="" /></div>
+<p>Webカメラで撮った顔画像からリアルタイムに脈拍を計測する技術</p>
+</a></li><li><a href="javascript:void(0)" onclick="callApi('getMediaById', 76);">
+<div><img src="http://eqa514ffey.eq.webcdn.stream.ne.jp/www50/eqa514ffey/jmc_pub/thumbnail/00001/f524740decfe4641995f2577fccf6fed_14.jpg" width="100" height="57" alt="" /></div>
+<p>実世界の物に対してタッチ操作可能な次世代ユーザーインターフェース</p>
+</a></li><li><a href="javascript:void(0)" onclick="callApi('getMediaById', 75);">
+<div><img src="http://eqa514ffey.eq.webcdn.stream.ne.jp/www50/eqa514ffey/jmc_pub/thumbnail/00001/8c04c88fd59e427da3fa57a44b5a759f_14.jpg" width="100" height="57" alt="" /></div>
+<p>勝手に入るゴミ箱 － 文化庁メディア芸術祭</p>
+</a></li>
+</ul>
+</div><!-- /newsPopular -->
+</div><!-- /newsAllSub -->
+</div><!-- /clearfix -->
+
+
+</div><!-- /content -->
+</div><!-- /contentWrap -->
+
+
+</div><!-- /contentPrimaryArea -->
+
+
+
+
+
+
+
+
+<div class="footerWrap footerUl"><div class="footer">
+<ul>
+<li><a href="/sitemap/">サイトマップ</a></li><li><a href="/privacy/">プライバシーポリシー</a></li><li><a href="/cop/cop05000.html">著作権</a></li><li><a href="/guide/tokusho.html">特定商取引法に基づく表記</a></li><li><a href="/adv/">広告掲載ガイド</a></li><li class="last"><a href="/toiawase/">お問合せ</a></li>
+</ul>
+</div></div><!-- /footerWrap -->
+
+<div class="footerWrap footerUl"><div class="footer">
+<ul>
+<li><a href="/cop/cop04000.html">経営理念</a></li><li><a href="/cop/">会社案内</a></li><li><a href="/recruit/">採用情報</a></li><li><a href="/cop/cop06000.html">環境方針</a></li><li><a href="/cop/cop08000.html">次世代育成支援事業主行動計画</a></li><li class="last"><a href="http://www.nikkan.co.jp/cop/english/cop-e00100.html" target="_blank">Company Profile(English)</a></li>
+</ul>
+</div></div><!-- /footerWrap -->
+
+
+<div class="footerWrap"><div class="footer">
+<p>掲載記事の無断転載を禁じます。発行：株式会社日刊工業新聞社　Copyright 2012 THE NIKKAN KOGYO SHIMBUN,LTD.</p>
+</div></div><!-- /footerWrap -->
+
+<script charset="UTF-8" type="text/javascript" src="js/apiPlaylistDemo.js"></script>
+</body>
+</html>
